@@ -38,16 +38,18 @@ const index = ({ data }) => {
     };
   };
   return (
-    <div>
+    <div style={{display: 'flex', width: '80%', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center'}}>
       <h1>Performance Measures: Single Server</h1>
-      <p>Lambda={lambda(data)}</p>
-      <p>Meu={meu(data)}</p>
-      <p>
+      <div style={{border: '1px solid grey', padding: '10px'}}>
+      <h2>Lambda={lambda(data)}</h2>
+      <h2>Meu={meu(data)}</h2>
+      <h2>
         Avg no of customers in system: {averageNumberOfCustomers(data)?.system}
-      </p>
-      <p>
+      </h2>
+      <h2>
         Avg no of customes in queue: {averageNumberOfCustomers(data)?.queue}
-      </p>
+      </h2>
+      </div>
     </div>
   );
 };

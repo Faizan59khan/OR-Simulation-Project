@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
+import PredictionTable from '../Components/PredictionTable'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -86,75 +87,23 @@ const RandomCustomersGeneration = ({ data }) => {
       console.log(timeBetArr[i + 1], interArr[i]);
       arrivalTime.push(timeBetArr[i + 1] + interArr[i]);
     }
-
-    console.log(arrivalTime);
     setTimes({ intArr: interArr, arrTime: arrivalTime, serTime: serviceTime });
     setRandomValues(res);
   };
   return (
     <div>
+      <label style={{display: 'flex', justifyContent: 'space-between', width: '45%', margin: '0 auto', alignItems: 'center'}}>
+      <h3>Random Numbers Amount</h3>
       <input
+        style={{width:'300px', height: '30px', borderRadius: '5px', outline:'none', border: '.5px solid grey'}}
         placeholder="Enter the number of random values"
         onChange={(e) => generateRandomEntries(e.target.value)}
       />
-      <Grid sx={{ width: "50%", margin: "0 auto" }} container spacing={2}>
-        <Grid item xs={2}>
-          <h3>No of Time b/w Arrivals</h3>
-        </Grid>
-        <Grid item xs={2}>
-          <h3>Commulative Probability</h3>
-        </Grid>
-      </Grid>
-      {randomValues
-        ? randomValues.map((entry) => {
-            return (
-              <Grid
-                sx={{ width: "50%", margin: "0 auto" }}
-                container
-                spacing={2}
-              >
-                <Grid item xs={4}>
-                  <Item>{entry?.timeBWArrivals}</Item>
-                </Grid>
-                <Grid item xs={4}>
-                  <Item>{entry?.commulativeProb}</Item>
-                </Grid>
-              </Grid>
-            );
-          })
-        : null}
-      <Grid sx={{ width: "50%", margin: "0 auto" }} container spacing={2}>
-        <Grid item xs={4}>
-          <h3>Inter Arrivals</h3>
-        </Grid>
-        <Grid item xs={4}>
-          <h3>Arrival Time</h3>
-        </Grid>
-        <Grid item xs={4}>
-          <h3>Service Time</h3>
-        </Grid>
-      </Grid>
-      {times
-        ? times?.intArr?.map((entry, index) => {
-            return (
-              <Grid
-                sx={{ width: "50%", margin: "0 auto" }}
-                container
-                spacing={2}
-              >
-                <Grid item xs={4}>
-                  <Item>{entry}</Item>
-                </Grid>
-                <Grid item xs={4}>
-                  <Item>{times?.arrTime[index]}</Item>
-                </Grid>
-                <Grid item xs={4}>
-                  <Item>{times?.serTime[index]}</Item>
-                </Grid>
-              </Grid>
-            );
-          })
-        : null}
+      </label>
+      <PredictionTable randomValues={randomValues} times={times} />
+     
+
+      
     </div>
   );
 };
