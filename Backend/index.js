@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const gammaRoutes = require("./routes/gamma");
+const disRoutes = require("./routes/distributionFit");
 const port = 5000;
 
 // Requiring the module
@@ -25,7 +27,11 @@ for (let i = 0; i < sheets.length; i++) {
 // Printing data
 console.log(data);
 
+app.use("/", gammaRoutes);
+app.use("/", disRoutes);
+
 app.get("/", async (req, res, next) => {
   res.send(data);
 });
+
 app.listen(process.env.PORT || port);

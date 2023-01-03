@@ -34,10 +34,13 @@ export default function CustomizedTables({ data }) {
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell align="center">Customer</StyledTableCell>
             <StyledTableCell align="center">Arrival Time</StyledTableCell>
             <StyledTableCell align="center">Service Time</StyledTableCell>
-            <StyledTableCell align="center">Menu</StyledTableCell>
+            <StyledTableCell align="center">Start Time</StyledTableCell>
+            <StyledTableCell align="center">End Time</StyledTableCell>
+            <StyledTableCell align="center">Turn Around Time</StyledTableCell>
+            <StyledTableCell align="center">Wait Time</StyledTableCell>
+            <StyledTableCell align="center">Response Time</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -45,16 +48,25 @@ export default function CustomizedTables({ data }) {
             ? data.map((row) => (
                 <StyledTableRow>
                   <StyledTableCell align="center">
-                    {row?.["Customer ID"]}
+                    {row?.["arrT"]}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    {row?.["Arrival Time(minute)"]}
+                    {row?.["serT"]}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    {row?.["Service Time(minute)"]}
+                    {row?.["startT"]}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    {row?.["Menu"]}
+                    {row?.["endT"]}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row?.["turnAroundTime"]}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row?.["waitTime"]}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row?.["responseTime"]}
                   </StyledTableCell>
                 </StyledTableRow>
               ))
