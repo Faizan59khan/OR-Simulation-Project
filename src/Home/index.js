@@ -31,6 +31,8 @@ const Home = ({
   const [performanceMeasures, setPerformanceMeasures] = useState();
   const [at, setAT] = useState();
   const [st, setST] = useState();
+  const [minST, setMinST] = useState();
+  const [maxST, setMaxSt] = useState();
   const selectedMenu = (value) => {
     if (value === "Burger and Fast Food") {
       const res = data.filter((entry) => entry?.["Menu"] === 1);
@@ -63,9 +65,16 @@ const Home = ({
   };
 
   const modelMeasures = async () => {
-    const url = `http://localhost:5000/poisson?server=${serverCount}&at=${
-      at || 1
-    }&st=${st || 1}`;
+    const url =
+      arrivalDistribution === "M" &&
+      serviceDistribution === "M" &&
+      serverCount === 1
+        ? `http://localhost:5000/poisson?server=${serverCount}&at=${
+            at || 1
+          }&st=${st || 1}`
+        : `http://localhost:5000/poisson?server=${serverCount}&at=${
+            at || 1
+          }&minST=${minST || 1}&maxST=${maxST}`;
     const data = await fetch(url);
     const res = await data
       .json()
@@ -201,7 +210,7 @@ const Home = ({
               <FormControlLabel
                 value="Exponential"
                 control={<Radio />}
-                disabled={arrivalDistribution === "M"}
+                disabled={arrivalDistribution === "G"}
                 label="Exponential"
                 onChange={(e) => {
                   selectedServiceDistribution(e.target.value);
@@ -226,34 +235,6 @@ const Home = ({
             </RadioGroup>
           </FormControl>
         </div>
-        <div style={{ display: "flex" }}>
-          <label style={{ margin: "10px", padding: "10px" }}>
-            <span>Enter Arrival Time </span>
-            <input
-              style={{
-                width: "300px",
-                height: "40px",
-                margin: "5px",
-                borderRadius: "5px",
-              }}
-              type="number"
-              onChange={(e) => setAT(e.target.value)}
-            />
-          </label>
-          <label style={{ margin: "10px", padding: "10px" }}>
-            <span>Enter Service Time </span>
-            <input
-              style={{
-                width: "300px",
-                height: "40px",
-                margin: "5px",
-                borderRadius: "5px",
-              }}
-              type="number"
-              onChange={(e) => setST(e.target.value)}
-            />
-          </label>
-        </div>
         <label style={{ margin: "10px", padding: "10px" }}>
           <span>Set Server Count </span>
           <input
@@ -267,6 +248,80 @@ const Home = ({
             onChange={(e) => hanndleChange(e.target.value)}
           />
         </label>
+        {arrivalDistribution === "M" &&
+        serviceDistribution === "M" &&
+        Number(serverCount) === 1 ? (
+          <div style={{ display: "flex" }}>
+            <label style={{ margin: "10px", padding: "10px" }}>
+              <span>Enter Arrival Time </span>
+              <input
+                style={{
+                  width: "300px",
+                  height: "40px",
+                  margin: "5px",
+                  borderRadius: "5px",
+                }}
+                type="number"
+                onChange={(e) => setAT(e.target.value)}
+              />
+            </label>
+            <label style={{ margin: "10px", padding: "10px" }}>
+              <span>Enter Service Time </span>
+              <input
+                style={{
+                  width: "300px",
+                  height: "40px",
+                  margin: "5px",
+                  borderRadius: "5px",
+                }}
+                type="number"
+                onChange={(e) => setST(e.target.value)}
+              />
+            </label>
+          </div>
+        ) : arrivalDistribution && serviceDistribution && serverCount ? (
+          <div style={{ display: "flex" }}>
+            <label style={{ margin: "10px", padding: "10px" }}>
+              <span>Enter Arrival Time </span>
+              <input
+                style={{
+                  width: "300px",
+                  height: "40px",
+                  margin: "5px",
+                  borderRadius: "5px",
+                }}
+                type="number"
+                onChange={(e) => setAT(e.target.value)}
+              />
+            </label>
+            <label style={{ margin: "10px", padding: "10px" }}>
+              <span>Enter Maximum Time </span>
+              <input
+                style={{
+                  width: "200px",
+                  height: "40px",
+                  margin: "5px",
+                  borderRadius: "5px",
+                }}
+                type="number"
+                onChange={(e) => setMaxSt(e.target.value)}
+              />
+            </label>
+            <label style={{ margin: "10px", padding: "10px" }}>
+              <span>Enter Minimum Time </span>
+              <input
+                style={{
+                  width: "200px",
+                  height: "40px",
+                  margin: "5px",
+                  borderRadius: "5px",
+                }}
+                type="number"
+                onChange={(e) => setMinST(e.target.value)}
+              />
+            </label>
+          </div>
+        ) : null}
       </div>
 
       <button
@@ -283,17 +338,13 @@ const Home = ({
             serviceDistribution &&
             serverCount &&
             at &&
-            st
+            (st || (maxST && minST))
               ? "#000"
               : "grey"
           }`,
         }}
         disabled={
-          !arrivalDistribution ||
-          !serviceDistribution ||
-          !serverCount ||
-          !at ||
-          !st
+          !arrivalDistribution || !serviceDistribution || !serverCount || !at
         }
         onClick={() => modelMeasures()}
       >
@@ -377,83 +428,6 @@ const Home = ({
           })}
         </div>
       ) : null}
-      {/* <FormControl>
-        <FormLabel
-          style={{
-            padding: "8px",
-            fontSize: "30px",
-            fontWeight: "bold",
-          }}
-          id="demo-radio-buttons-group-label"
-        >
-          Select Menu
-        </FormLabel>
-        <RadioGroup
-          row
-          style={{ padding: "5px", textAlign: "center" }}
-          aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue="female"
-          name="radio-buttons-group"
-        >
-          <FormControlLabel
-            value="Burger and Fast Food"
-            control={<Radio />}
-            label="Burger and Fast Food"
-            onChange={(e) => {
-              selectedMenu(e.target.value);
-            }}
-          />
-          <FormControlLabel
-            value="Rice & Chicken"
-            control={<Radio />}
-            label="Rice & Chicken"
-            onChange={(e) => {
-              selectedMenu(e.target.value);
-            }}
-          />
-        </RadioGroup>
-      </FormControl> */}
-
-      {/* <h1>Simulation</h1>
-      <Grid sx={{ width: "50%", margin: "0 auto" }} container spacing={2}>
-        <Grid item xs={3}>
-          <h1>Customer</h1>
-        </Grid>
-        <Grid item xs={3}>
-          <h1>Arrival Time</h1>
-        </Grid>
-        <Grid item xs={3}>
-          <h1>Service Time</h1>
-        </Grid>
-        <Grid item xs={3}>
-          <h1>Menu</h1>
-        </Grid>
-      </Grid>
-
-      {menuWiseData
-        ? menuWiseData.map((entry) => {
-            return (
-              <Grid
-                sx={{ width: "50%", margin: "0 auto" }}
-                container
-                spacing={2}
-              >
-                <Grid item xs={3}>
-                  <Item>{entry?.["Customer ID"]}</Item>
-                </Grid>
-                <Grid item xs={3}>
-                  <Item>{entry?.["Arrival Time(minute)"]}</Item>
-                </Grid>
-                <Grid item xs={3}>
-                  <Item>{entry?.["Service Time(minute)"]}</Item>
-                </Grid>
-                <Grid item xs={3}>
-                  <Item>{entry?.["Menu"]}</Item>
-                </Grid>
-              </Grid>
-            );
-          })
-        : null} */}
     </div>
   );
 };

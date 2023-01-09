@@ -66,7 +66,7 @@ function App() {
     <BrowserRouter>
       <AppBar />
       <h1 style={{ textAlign: "center", color: "grey" }}>
-        Queuing Model: Simulation
+        A Generic Model For Performance Evaluation
       </h1>
       <Routes>
         <Route
