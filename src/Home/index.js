@@ -68,11 +68,11 @@ const Home = ({
     const url =
       arrivalDistribution === "M" &&
       serviceDistribution === "M" &&
-      Number(serverCount) === 1
-        ? `https://or-simulation-backend-production.up.railway.app/poisson?server=${serverCount}&at=${
+      Number(serverCount) >= 1
+        ? `http://localhost:5000/poisson?server=${serverCount}&at=${
             at || 1
           }&st=${st || 1}`
-        : `https://or-simulation-backend-production.up.railway.app/poisson?server=${serverCount}&at=${
+        : `http://localhost:5000/poisson?server=${serverCount}&at=${
             at || 1
           }&minST=${minST || 1}&maxST=${maxST}`;
     const data = await fetch(url);
@@ -111,7 +111,7 @@ const Home = ({
         style={{
           display: "flex",
           flexDirection: "column",
-          width: "50%",
+          width: "80%",
           border: "1px solid grey",
           margin: "0 auto",
           padding: "12px",
@@ -250,7 +250,7 @@ const Home = ({
         </label>
         {arrivalDistribution === "M" &&
         serviceDistribution === "M" &&
-        Number(serverCount) === 1 ? (
+        Number(serverCount) >= 1 ? (
           <div style={{ display: "flex" }}>
             <label style={{ margin: "10px", padding: "10px" }}>
               <span>Enter Arrival Time </span>
@@ -324,32 +324,50 @@ const Home = ({
         ) : null}
       </div>
 
-      <button
-        style={{
-          cursor: "pointer",
-          borderRadius: "5px",
-          margin: "10px",
-          padding: " 5px",
-          height: "50px",
-          color: "#fff",
-          textAlign: "center",
-          backgroundColor: `${
-            arrivalDistribution &&
-            serviceDistribution &&
-            serverCount &&
-            at &&
-            (st || (maxST && minST))
-              ? "#000"
-              : "grey"
-          }`,
-        }}
-        disabled={
-          !arrivalDistribution || !serviceDistribution || !serverCount || !at
-        }
-        onClick={() => modelMeasures()}
-      >
-        Calculate Performance Measures
-      </button>
+      {performanceMeasures ? (
+        <button
+          style={{
+            cursor: "pointer",
+            borderRadius: "5px",
+            margin: "10px",
+            padding: " 5px",
+            height: "50px",
+            color: "#fff",
+            textAlign: "center",
+            backgroundColor: "#000",
+          }}
+          onClick={() => setPerformanceMeasures("")}
+        >
+          Clear Performance Measures
+        </button>
+      ) : (
+        <button
+          style={{
+            cursor: "pointer",
+            borderRadius: "5px",
+            margin: "10px",
+            padding: " 5px",
+            height: "50px",
+            color: "#fff",
+            textAlign: "center",
+            backgroundColor: `${
+              arrivalDistribution &&
+              serviceDistribution &&
+              serverCount &&
+              at &&
+              (st || (maxST && minST))
+                ? "#000"
+                : "grey"
+            }`,
+          }}
+          disabled={
+            !arrivalDistribution || !serviceDistribution || !serverCount || !at
+          }
+          onClick={() => modelMeasures()}
+        >
+          Calculate Performance Measures
+        </button>
+      )}
       {performanceMeasures ? (
         <div>
           <h2
