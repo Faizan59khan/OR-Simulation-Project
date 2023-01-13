@@ -69,10 +69,10 @@ const Home = ({
       arrivalDistribution === "M" &&
       serviceDistribution === "M" &&
       Number(serverCount) >= 1
-        ? `https://or-simulation-backend-production.up.railway.app/poisson?server=${serverCount}&at=${
+        ? `http://localhost:5000/poisson?server=${serverCount}&at=${
             at || 1
           }&st=${st || 1}`
-        : `https://or-simulation-backend-production.up.railway.app/poisson?server=${serverCount}&at=${
+        : `http://localhost:5000/poisson?server=${serverCount}&at=${
             at || 1
           }&minST=${minST || 1}&maxST=${maxST}`;
     const data = await fetch(url);
@@ -253,7 +253,7 @@ const Home = ({
         Number(serverCount) >= 1 ? (
           <div style={{ display: "flex" }}>
             <label style={{ margin: "10px", padding: "10px" }}>
-              <span>Enter Arrival Time </span>
+              <span>Enter Mean of Arrival Time </span>
               <input
                 style={{
                   width: "300px",
@@ -266,7 +266,7 @@ const Home = ({
               />
             </label>
             <label style={{ margin: "10px", padding: "10px" }}>
-              <span>Enter Service Time </span>
+              <span>Enter Mean of Service Time </span>
               <input
                 style={{
                   width: "300px",
@@ -282,7 +282,7 @@ const Home = ({
         ) : arrivalDistribution && serviceDistribution && serverCount ? (
           <div style={{ display: "flex" }}>
             <label style={{ margin: "10px", padding: "10px" }}>
-              <span>Enter Arrival Time </span>
+              <span>Enter Mean of Arrival Time </span>
               <input
                 style={{
                   width: "300px",
@@ -295,7 +295,7 @@ const Home = ({
               />
             </label>
             <label style={{ margin: "10px", padding: "10px" }}>
-              <span>Enter Maximum Time </span>
+              <span>Enter Maximum Time ST </span>
               <input
                 style={{
                   width: "200px",
@@ -308,7 +308,7 @@ const Home = ({
               />
             </label>
             <label style={{ margin: "10px", padding: "10px" }}>
-              <span>Enter Minimum Time </span>
+              <span>Enter Minimum Time ST</span>
               <input
                 style={{
                   width: "200px",
