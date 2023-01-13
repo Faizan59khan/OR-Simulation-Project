@@ -325,21 +325,24 @@ const Home = ({
       </div>
 
       {performanceMeasures ? (
-        <button
-          style={{
-            cursor: "pointer",
-            borderRadius: "5px",
-            margin: "10px",
-            padding: " 5px",
-            height: "50px",
-            color: "#fff",
-            textAlign: "center",
-            backgroundColor: "#000",
-          }}
-          onClick={() => setPerformanceMeasures("")}
-        >
-          Clear Performance Measures
-        </button>
+        <>
+          <button
+            style={{
+              cursor: "pointer",
+              borderRadius: "5px",
+              margin: "10px",
+              padding: " 5px",
+              height: "50px",
+              color: "#fff",
+              textAlign: "center",
+              backgroundColor: "#000",
+            }}
+            onClick={() => setPerformanceMeasures("")}
+          >
+            Clear Performance Measures
+          </button>
+          <h3>Make Sure Re-Enter Input Values After Clear</h3>
+        </>
       ) : (
         <button
           style={{
