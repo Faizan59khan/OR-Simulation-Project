@@ -69,10 +69,10 @@ const Home = ({
       arrivalDistribution === "M" &&
       serviceDistribution === "M" &&
       Number(serverCount) >= 1
-        ? `http://localhost:5000/poisson?server=${serverCount}&at=${
+        ? `https://or-simulation-backend-production.up.railway.app/poisson?server=${serverCount}&at=${
             at || 1
           }&st=${st || 1}`
-        : `http://localhost:5000/poisson?server=${serverCount}&at=${
+        : `https://or-simulation-backend-production.up.railway.app/poisson?server=${serverCount}&at=${
             at || 1
           }&minST=${minST || 1}&maxST=${maxST}`;
     const data = await fetch(url);
