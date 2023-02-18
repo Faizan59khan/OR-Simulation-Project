@@ -403,7 +403,9 @@ const Home = ({
                   }}
                 >
                   Average Number Of Customers In System:{" "}
-                  <span style={{ color: "red" }}>{measure?.L.toFixed(2)}</span>
+                  <span style={{ color: "red" }}>
+                    {measure?.L.toFixed(2)} customers
+                  </span>
                 </h3>
                 <h3
                   style={{
@@ -416,7 +418,9 @@ const Home = ({
                   }}
                 >
                   Average Number Of Customers In Queue:{" "}
-                  <span style={{ color: "red" }}>{measure?.Lq.toFixed(2)}</span>
+                  <span style={{ color: "red" }}>
+                    {measure?.Lq.toFixed(2)} customers
+                  </span>
                 </h3>
                 <h3
                   style={{
@@ -429,7 +433,9 @@ const Home = ({
                   }}
                 >
                   Average Waiting Time In Queue:{" "}
-                  <span style={{ color: "red" }}>{measure?.Wq.toFixed(2)}</span>
+                  <span style={{ color: "red" }}>
+                    {measure?.Wq.toFixed(2)} minutes
+                  </span>
                 </h3>
                 <h3
                   style={{
@@ -442,7 +448,9 @@ const Home = ({
                   }}
                 >
                   Average Waiting Time In System:{" "}
-                  <span style={{ color: "red" }}>{measure?.W.toFixed(2)}</span>
+                  <span style={{ color: "red" }}>
+                    {measure?.W.toFixed(2)} minutes
+                  </span>
                 </h3>
               </div>
             );
