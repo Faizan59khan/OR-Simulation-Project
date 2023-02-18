@@ -33,6 +33,8 @@ const Home = ({
   const [st, setST] = useState();
   const [minST, setMinST] = useState();
   const [maxST, setMaxSt] = useState();
+  const [loading, setLoading] = useState(false);
+  const [disabled, setDisabled] = useState(false);
   const selectedMenu = (value) => {
     if (value === "Burger and Fast Food") {
       const res = data.filter((entry) => entry?.["Menu"] === 1);
@@ -43,6 +45,13 @@ const Home = ({
     }
   };
 
+  const setInitialInputValues = () => {
+    setAT("");
+    setST("");
+    setMaxSt("");
+    setMinST("");
+  };
+
   const selectedArrivalDistribution = (value) => {
     console.log(value);
     if (["Exponential"].includes(value)) {
@@ -50,6 +59,7 @@ const Home = ({
     } else {
       setArrivalDistributions("G");
     }
+    setInitialInputValues();
   };
   const selectedServiceDistribution = (value) => {
     console.log(value);
@@ -58,52 +68,72 @@ const Home = ({
     } else {
       setServiceDistributions("G");
     }
+    setInitialInputValues();
   };
 
   const hanndleChange = (value) => {
     setServerCount(value);
   };
 
+  const inputFieldValidations = () => {
+    if (arrivalDistribution === "M" && serviceDistribution === "M") {
+      return at && st;
+    } else {
+      console.log(at, maxST, minST);
+      return at && maxST && minST;
+    }
+    return false;
+  };
+
   const modelMeasures = async () => {
-    const url =
-      arrivalDistribution === "M" &&
-      serviceDistribution === "M" &&
-      Number(serverCount) >= 1
-        ? `https://or-simulation-backend-production-2485.up.railway.app/poisson?server=${serverCount}&at=${
-            at || 1
-          }&st=${st || 1}`
-        : `https://or-simulation-backend-production-2485.up.railway.app/poisson?server=${serverCount}&at=${
-            at || 1
-          }&minST=${minST || 1}&maxST=${maxST}`;
-    const data = await fetch(url);
-    const res = await data
-      .json()
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    console.log(
-      res[
-        `${arrivalDistribution}${serviceDistribution}${
-          serverCount > 1 ? "C" : "1"
-        }`
-      ]
-    );
-    let arr = [
-      {
-        ...res[
+    setLoading(true);
+    if (inputFieldValidations()) {
+      const url =
+        arrivalDistribution === "M" &&
+        serviceDistribution === "M" &&
+        Number(serverCount) >= 1
+          ? `https://or-simulation-backend-production-2485.up.railway.app/poisson?server=${serverCount}&at=${
+              at || 1
+            }&st=${st || 1}`
+          : `https://or-simulation-backend-production-2485.up.railway.app/poisson?server=${serverCount}&at=${
+              at || 1
+            }&minST=${minST || 1}&maxST=${maxST}`;
+      const data = await fetch(url);
+      const res = await data
+        .json()
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+      console.log(
+        res[
           `${arrivalDistribution}${serviceDistribution}${
             serverCount > 1 ? "C" : "1"
           }`
-        ],
-        model: `${arrivalDistribution}/${serviceDistribution}/${
-          serverCount > 1 ? "C" : "1"
-        }`,
-      },
-    ];
-    setPerformanceMeasures(arr);
+        ]
+      );
+      let arr = [
+        {
+          ...res[
+            `${arrivalDistribution}${serviceDistribution}${
+              serverCount > 1 ? "C" : "1"
+            }`
+          ],
+          model: `${arrivalDistribution}/${serviceDistribution}/${
+            serverCount > 1 ? "C" : "1"
+          }`,
+        },
+      ];
+      setPerformanceMeasures(arr);
+    } else {
+      alert("Enter All Inputs");
+      setLoading(false);
+    }
   };
   return (
     <div style={{ textAlign: "center" }}>
@@ -261,6 +291,7 @@ const Home = ({
                   margin: "5px",
                   borderRadius: "5px",
                 }}
+                value={at}
                 type="number"
                 onChange={(e) => setAT(e.target.value)}
               />
@@ -274,6 +305,7 @@ const Home = ({
                   margin: "5px",
                   borderRadius: "5px",
                 }}
+                value={st}
                 type="number"
                 onChange={(e) => setST(e.target.value)}
               />
@@ -290,6 +322,7 @@ const Home = ({
                   margin: "5px",
                   borderRadius: "5px",
                 }}
+                value={at}
                 type="number"
                 onChange={(e) => setAT(e.target.value)}
               />
@@ -303,6 +336,7 @@ const Home = ({
                   margin: "5px",
                   borderRadius: "5px",
                 }}
+                value={maxST}
                 type="number"
                 onChange={(e) => setMaxSt(e.target.value)}
               />
@@ -316,6 +350,7 @@ const Home = ({
                   margin: "5px",
                   borderRadius: "5px",
                 }}
+                value={minST}
                 type="number"
                 onChange={(e) => setMinST(e.target.value)}
               />
@@ -353,22 +388,11 @@ const Home = ({
             height: "50px",
             color: "#fff",
             textAlign: "center",
-            backgroundColor: `${
-              arrivalDistribution &&
-              serviceDistribution &&
-              serverCount &&
-              at &&
-              (st || (maxST && minST))
-                ? "#000"
-                : "grey"
-            }`,
+            backgroundColor: `#000`,
           }}
-          disabled={
-            !arrivalDistribution || !serviceDistribution || !serverCount || !at
-          }
           onClick={() => modelMeasures()}
         >
-          Calculate Performance Measures
+          {loading ? "Loading..." : "Calculate Performance Measures"}
         </button>
       )}
       {performanceMeasures ? (
